@@ -24,20 +24,22 @@ export default function Component() {
         <h3>{username} Todos</h3>
         <Link to='/new'>New List</Link>
       </header>
-      {list.length ? list.map((list) => (
-        <Link to={`/${list.id}`} className="todo-list" key={list.id}>
-          <h4>{list.name}</h4>
-          <ul>
-            {list.todos.slice(0, 3).map((todo) => (
-              <li key={todo.id}>
-                {todo.done ? "✅" : "❌"} {todo.title}
-              </li>
-            ))}
-          </ul>
-        </Link>
-      )) : (
-        <p>No todo lists found</p>
-      )}
+      <div className="todo-list-wrapper">
+        {list.length ? list.map((list) => (
+          <Link to={`/${list.id}`} className="todo-list" key={list.id}>
+            <h4>{list.name}</h4>
+            <ul>
+              {list.todos.slice(0, 3).map((todo) => (
+                <li key={todo.id}>
+                  {todo.done ? "✅" : "❌"} {todo.title}
+                </li>
+              ))}
+            </ul>
+          </Link>
+        )) : (
+          <p>No todo lists found</p>
+        )}
+      </div>
     </div>
   );
 }

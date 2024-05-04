@@ -33,14 +33,24 @@ export default function Component() {
   }
 
   return (
-    <div className="todo-content">
+    <div className="todo-content todo-id-content">
       <header className="content-header">
         <h3>New List</h3>
       </header>
       <Form method="post">
         <label>
           List Name
-          <input type="text" name="name" required />
+          <input
+            type="text"
+            name="name"
+            required
+            style={{
+              padding: '6px 12px',
+              margin: '0 4px 8px 4px',
+              border: '1px solid #121212',
+              borderRadius: '4px'
+            }}
+          />
         </label>
         <input type="hidden" name="todos" value={JSON.stringify(todos)} />
         {todos
@@ -62,7 +72,7 @@ export default function Component() {
             </div>
           ))
         }
-        <div>
+        <div className="todo-id-submit">
           <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
           <button
             type="button"
@@ -71,7 +81,18 @@ export default function Component() {
             Add Todo
           </button>
         </div>
-        <button type="submit">Create</button>
+        <button
+          type="submit"
+          style={{
+            padding: '6px 12px',
+            margin: '8px 4px',
+            backgroundColor: '#121212',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: '4px'
+          }}
+        >Create</button>
       </Form>
     </div>
   );

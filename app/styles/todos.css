@@ -1,6 +1,7 @@
 .todo-page {
   min-height: 100vh;
   height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .todo-header {
@@ -9,14 +10,31 @@
   align-items: center;
   padding: 8px 24px;
   font-size: 18px;
-}
+  
+  a {
+    text-decoration: none;
+  }
 
-.todo-header a:last-child {
-  text-decoration: none;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 4px;
-  background-color: #121212;
+  & a:first-child {
+    font-size: 24px;
+    color: #000;
+
+    &:hover {
+      color: #121212;
+      text-decoration: underline;
+    }
+  }
+  
+  & a:last-child {
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #121212;
+
+    &:hover {
+      background-color: #333;
+    }
+  }
 }
 
 .todo-content {
@@ -34,12 +52,105 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
+  
+  & h3 {
+    font-size: 18px;
+  }
+
+  & a {
+    text-decoration: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #121212;
+
+    &:hover {
+      background-color: #333;
+    }
+  }
 }
 
-.content-header a {
+.todo-list-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+  gap: 16px;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
   text-decoration: none;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 4px;
-  background-color: #121212;
+  color: #000;
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 12px 16px;
+
+  &:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    background: #f9f9f9;
+  }
+
+  & p {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  & h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  & ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+    font-size: 14px;
+  }
+
+  & li {
+    list-style: none;
+  }
+
+  & li::before {
+    content: '•';
+    margin-right: 8px;
+  }
+}
+
+.todo-id-content {
+  & input[type='checkbox']:hover {
+    cursor: pointer;
+  }
+
+  & label:hover {
+    cursor: pointer;
+  }
+}
+
+.todo-id-header {
+  font-size: 18px;
+}
+
+.todo-id-submit {
+  display: flex;
+  margin: 8px 0px;
+  
+  & input {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #121212;
+    margin-right: 8px;
+  }
+
+  & button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #121212;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
 }

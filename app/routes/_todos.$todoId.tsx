@@ -64,8 +64,8 @@ export default function Component() {
   }
 
   return (
-    <div className="todo-content">
-      <p>{listName}</p>
+    <div className="todo-content todo-id-content">
+      <p className="todo-id-header">{listName}</p>
       {todos
         .sort((a, b) => (
           a.done === b.done ? 0 : a.done ? 1 : -1
@@ -77,6 +77,7 @@ export default function Component() {
               value={todo.title}
               checked={todo.done}
               form={undefined}
+              id={`${todo.title}-input`}
               onChange={(e) => {
                 setTodos(prev => prev.map(t => t.id === todo.id ? { ...t, done: e.target.checked } : t))
                 fetcher.submit({
@@ -87,11 +88,11 @@ export default function Component() {
                 })
               }}
             />
-            <label>{todo.title}</label>
+            <label htmlFor={`${todo.title}-input`}>{todo.title}</label>
           </div>
         ))
       }
-      <div>
+      <div className="todo-id-submit">
         <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
         <button
           type="button"
