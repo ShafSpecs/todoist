@@ -1,5 +1,4 @@
 import { useLoaderData } from "@remix-run/react";
-import { Fragment } from "react/jsx-runtime";
 import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { createTodo, getTodoList, updateTodo } from "~/.server/todos";
 import { useRef, useState } from "react";
@@ -13,13 +12,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     case 'add': {
       const todo = JSON.parse(formEntries.todo as string)
       await createTodo(params.todoId!, todo)
-      
+
       return new Response('Successfully created todo')
     }
     case 'update': {
-      const { id, ...todo} = JSON.parse(formEntries.todo as string)
+      const { id, ...todo } = JSON.parse(formEntries.todo as string)
       await updateTodo(id, todo)
-      
+
       return new Response('Successfully updated todo')
     }
     default:
@@ -65,44 +64,42 @@ export default function Component() {
   }
 
   return (
-    <Fragment>
-      <div className="todo-content">
-        <p>{listName}</p>
-        {todos
-          .sort((a, b) => (
-            a.done === b.done ? 0 : a.done ? 1 : -1
-          ))
-          .map(todo => (
-            <div key={todo.title}>
-              <input
-                type="checkbox"
-                value={todo.title}
-                checked={todo.done}
-                form={undefined}
-                onChange={(e) => {
-                  setTodos(prev => prev.map(t => t.id === todo.id ? { ...t, done: e.target.checked } : t))
-                  fetcher.submit({
-                    type: 'update',
-                    todo: JSON.stringify({ id: todo.id, title: todo.title, done: e.target.checked })
-                  }, {
-                    method: 'POST'
-                  })
-                }}
-              />
-              <label>{todo.title}</label>
-            </div>
-          ))
-        }
-        <div>
-          <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
-          <button
-            type="button"
-            onClick={addTodo}
-          >
-            Add Todo
-          </button>
-        </div>
+    <div className="todo-content">
+      <p>{listName}</p>
+      {todos
+        .sort((a, b) => (
+          a.done === b.done ? 0 : a.done ? 1 : -1
+        ))
+        .map(todo => (
+          <div key={todo.title}>
+            <input
+              type="checkbox"
+              value={todo.title}
+              checked={todo.done}
+              form={undefined}
+              onChange={(e) => {
+                setTodos(prev => prev.map(t => t.id === todo.id ? { ...t, done: e.target.checked } : t))
+                fetcher.submit({
+                  type: 'update',
+                  todo: JSON.stringify({ id: todo.id, title: todo.title, done: e.target.checked })
+                }, {
+                  method: 'POST'
+                })
+              }}
+            />
+            <label>{todo.title}</label>
+          </div>
+        ))
+      }
+      <div>
+        <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
+        <button
+          type="button"
+          onClick={addTodo}
+        >
+          Add Todo
+        </button>
       </div>
-    </Fragment>
+    </div>
   )
 }

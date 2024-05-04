@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { z } from "zod";
 import { createTodoList } from "~/.server/todos";
 
@@ -33,48 +33,46 @@ export default function Component() {
   }
 
   return (
-    <Fragment>
-      <div className="todo-content">
-        <header className="content-header">
-          <h3>New List</h3>
-        </header>
-        <Form method="post">
-          <label>
-            List Name
-            <input type="text" name="name" required />
-          </label>
-          <input type="hidden" name="todos" value={JSON.stringify(todos)} />
-          {todos
-            .sort((a, b) => (
-              a.done === b.done ? 0 : a.done ? 1 : -1
-            ))
-            .map(todo => (
-              <div key={todo.text}>
-                <input
-                  type="checkbox"
-                  value={todo.text}
-                  checked={todo.done}
-                  form={undefined}
-                  onChange={(e) => (
-                    setTodos(prev => prev.map(t => t.text === todo.text ? { ...t, done: e.target.checked } : t))
-                  )} 
-                />
-                <label>{todo.text}</label>
-              </div>
-            ))
-          }
-          <div>
-            <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
-            <button
-              type="button"
-              onClick={addTodo}
-            >
-              Add Todo
-            </button>
-          </div>
-          <button type="submit">Create</button>
-        </Form>
-      </div>
-    </Fragment>
+    <div className="todo-content">
+      <header className="content-header">
+        <h3>New List</h3>
+      </header>
+      <Form method="post">
+        <label>
+          List Name
+          <input type="text" name="name" required />
+        </label>
+        <input type="hidden" name="todos" value={JSON.stringify(todos)} />
+        {todos
+          .sort((a, b) => (
+            a.done === b.done ? 0 : a.done ? 1 : -1
+          ))
+          .map(todo => (
+            <div key={todo.text}>
+              <input
+                type="checkbox"
+                value={todo.text}
+                checked={todo.done}
+                form={undefined}
+                onChange={(e) => (
+                  setTodos(prev => prev.map(t => t.text === todo.text ? { ...t, done: e.target.checked } : t))
+                )}
+              />
+              <label>{todo.text}</label>
+            </div>
+          ))
+        }
+        <div>
+          <input type="text" form={undefined} placeholder="Add Todo" ref={addTodoRef} />
+          <button
+            type="button"
+            onClick={addTodo}
+          >
+            Add Todo
+          </button>
+        </div>
+        <button type="submit">Create</button>
+      </Form>
+    </div>
   );
 }
