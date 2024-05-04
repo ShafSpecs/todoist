@@ -1,0 +1,45 @@
+.todo-page {
+  min-height: 100vh;
+  height: 100%;
+}
+
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  font-size: 18px;
+}
+
+.todo-header a:last-child {
+  text-decoration: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: #121212;
+}
+
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 24px;
+  row-gap: 8px;
+}
+
+.todo-content input {
+  outline: none;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-header a {
+  text-decoration: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: #121212;
+}
