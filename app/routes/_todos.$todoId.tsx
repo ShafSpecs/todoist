@@ -1,8 +1,11 @@
 import { useLoaderData } from "@remix-run/react";
 import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { createTodo, getTodoList, updateTodo } from "~/.server/todos";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router-dom";
+import { Logger, WorkerActionArgs, WorkerLoadContext } from "@remix-pwa/sw";
+import { BackgroundSyncQueue } from "@remix-pwa/sync";
+import { useNetworkConnectivity } from "@remix-pwa/client";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const form = await request.formData()
@@ -26,6 +29,25 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
+type ExtendedContext = WorkerLoadContext & { logger: Logger, queue: BackgroundSyncQueue }
+
+export const workerAction = async ({ context }: WorkerActionArgs) => {
+  const { fetchFromServer, queue, event } = context as ExtendedContext
+
+  let response;
+
+  try {
+    response = await fetchFromServer()
+  } catch {
+    await queue.pushRequest({
+      request: event.request,
+    })
+    response = Response.error()
+  }
+
+  return response
+}
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const list = await getTodoList(request, params.todoId!)
 
@@ -39,14 +61,39 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   })
 }
 
+type Toast = {
+  title: string
+  body: string
+}
+
 export default function Component() {
   const fetcher = useFetcher()
   const { listName, listTodos } = useLoaderData<typeof loader>()
 
   const [todos, setTodos] = useState(listTodos)
+  const [toast, setToast] = useState<Toast | null>(null)
   const addTodoRef = useRef<HTMLInputElement>(null!)
 
-  if (listTodos !== todos) setTodos(listTodos)
+  const isOnline = useNetworkConnectivity({
+    onOnline: () => {
+      setToast({ title: 'Online', body: 'Thank Goodness! We are back online' })
+    },
+    onOffline: () => {
+      setToast({ title: 'Offline', body: 'Oh no! You are offline' })
+    }
+  })
+
+  useEffect(() => {
+    if (toast) setTimeout(() => setToast(null), 3000)
+  }, [toast])
+
+  useEffect(() => {
+    if (isOnline) {
+      setTodos(listTodos)
+    } else {
+      return;
+    }
+  }, [listTodos])
 
   const addTodo = () => {
     if (!addTodoRef.current.value) return
@@ -65,6 +112,11 @@ export default function Component() {
 
   return (
     <div className="todo-content todo-id-content">
+      {toast && <div className="toast">
+        <h2>{toast.title}</h2>
+        <p>{toast.body}</p>
+      </div>
+      }
       <p className="todo-id-header">{listName}</p>
       {todos
         .sort((a, b) => (

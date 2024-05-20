@@ -1,7 +1,7 @@
 import { redirect, type MetaFunction } from "@remix-run/node";
 
 export const loader = () => {
-  return redirect('/todos')
+  return redirect('/login')
 }
 
 export const meta: MetaFunction = () => {
