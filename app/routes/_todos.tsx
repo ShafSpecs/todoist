@@ -15,7 +15,7 @@ export default function Component() {
       <nav className="todo-header">
         <Link to={'/todos'}>Todoist</Link>
         <div>
-          {(userInstallChoice && userInstallChoice !== 'accepted') && <button type="button" onClick={promptInstall}>Install</button>}
+          {(!userInstallChoice || userInstallChoice !== 'accepted') && <button type="button" onClick={promptInstall}>Install</button>}
           <Link to='/logout'>Logout</Link>
         </div>
       </nav>
